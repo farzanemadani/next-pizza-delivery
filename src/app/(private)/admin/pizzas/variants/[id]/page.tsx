@@ -1,28 +1,33 @@
-import { Button } from "@/components/ui/button";
+
 import { PizzaVariantsPageProps } from "./types";
-import PageTitle from "@/components/ui/pageTitle";
 import { readPizzaById } from "@/actions/pizzas";
+import PageContent from "./content";
+import { readVariantsByPizzaId } from "@/actions/variants";
 
 async function PizzaVariantsPage({ params }: PizzaVariantsPageProps) {
   const { id } = await params;
-  const response = await readPizzaById(parseInt(id));
+  const pizzaId = parseInt(id);
 
-  if (!response.success || !response.data) {
+  const pizzaResponse = await readPizzaById(pizzaId);
+  if (!pizzaResponse.success || !pizzaResponse.data) {
     return (
       <div>
-        Error: {response.success ? "Pizza not found" : response.message}
+        Error:{" "}
+        {pizzaResponse.success ? "Pizza not found" : pizzaResponse.message}
       </div>
     );
   }
 
-  const pizza = response.data;
+  const variantsResponse = await readVariantsByPizzaId(pizzaId);
+  if (!variantsResponse.success) {
+    return <div>Error: {variantsResponse.message}</div>;
+  }
+
   return (
-    <div>
-      <div className="flex justify-between items-center">
-        <PageTitle title={`Variaants for ${pizza.name}`} />
-        <Button>New Variants</Button>
-      </div>
-    </div>
+    <PageContent
+      pizza={pizzaResponse.data}
+      initialVariants={variantsResponse.data}
+    />
   );
 }
 
