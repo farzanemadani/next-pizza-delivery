@@ -6,16 +6,19 @@ import toast from "react-hot-toast";
 import { deletePizza } from "@/actions/pizzas";
 import type { IPizza } from "@/interfaces";
 import { Button } from "@/components/ui/button";
+import ConfirmDialog from "@/components/ui/dialog/confirm-dialog";
 import PizzasTable from "@/components/pizzas/pizzas-table";
 import PizzaForm from "@/components/ui/form/pizza-form";
 import PageTitle from "@/components/ui/pageTitle";
-import { AdminPizzasManagerProps }  from './types'
+import { AdminPizzasManagerProps } from "./types";
 
 
 function AdminPizzasManager({ initialPizzas }: AdminPizzasManagerProps) {
   const [pizzas, setPizzas] = useState<IPizza[]>(initialPizzas);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedPizza, setSelectedPizza] = useState<IPizza | null>(null);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [pizzaToDelete, setPizzaToDelete] = useState<IPizza | null>(null);
   const [deletingPizzaId, setDeletingPizzaId] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -39,6 +42,44 @@ function AdminPizzasManager({ initialPizzas }: AdminPizzasManagerProps) {
     setFormOpen(true);
   };
 
+  const openDeleteDialog = (pizza: IPizza) => {
+    setPizzaToDelete(pizza);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleDelete = () => {
+    if (!pizzaToDelete) {
+      return;
+    }
+
+    setDeletingPizzaId(pizzaToDelete.id);
+
+    startTransition(async () => {
+      try {
+        const result = await deletePizza(pizzaToDelete.id);
+
+        if (!result.success) {
+          toast.error(result.message || "Unable to delete pizza.");
+          return;
+        }
+
+        setPizzas((current) =>
+          current.filter((currentPizza) => currentPizza.id !== pizzaToDelete.id),
+        );
+        toast.success("Pizza deleted.");
+        setConfirmDeleteOpen(false);
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while deleting the pizza.",
+        );
+      } finally {
+        setDeletingPizzaId(null);
+      }
+    });
+  };
+
   const handleFormSuccess = (pizza: IPizza, mode: "create" | "update") => {
     setPizzas((current) => {
       if (mode === "create") {
@@ -51,41 +92,6 @@ function AdminPizzasManager({ initialPizzas }: AdminPizzasManagerProps) {
     });
   };
 
-  const handleDelete = (pizza: IPizza) => {
-    const confirmed = window.confirm(
-      `Delete "${pizza.name ?? "this pizza"}"? This action cannot be undone.`,
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    setDeletingPizzaId(pizza.id);
-
-    startTransition(async () => {
-      try {
-        const result = await deletePizza(pizza.id);
-
-        if (!result.success) {
-          toast.error(result.message || "Unable to delete pizza.");
-          return;
-        }
-
-        setPizzas((current) =>
-          current.filter((currentPizza) => currentPizza.id !== pizza.id),
-        );
-        toast.success("Pizza deleted.");
-      } catch (error) {
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Something went wrong while deleting the pizza.",
-        );
-      } finally {
-        setDeletingPizzaId(null);
-      }
-    });
-  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -102,7 +108,24 @@ function AdminPizzasManager({ initialPizzas }: AdminPizzasManagerProps) {
         deletingPizzaId={deletingPizzaId}
         isDeleting={isPending}
         onEdit={openEditDialog}
-        onDelete={handleDelete}
+        onDelete={openDeleteDialog}
+      />
+
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onOpenChange={(open) => {
+          setConfirmDeleteOpen(open);
+          if (!open) {
+            setPizzaToDelete(null);
+          }
+        }}
+        title="Confirm delete"
+        description={`Are you sure you want to delete "${pizzaToDelete?.name ?? "this pizza"}"?`}
+        confirmLabel="Delete pizza"
+        cancelLabel="Cancel"
+        onConfirm={handleDelete}
+        isConfirming={isPending && deletingPizzaId === pizzaToDelete?.id}
+        confirmDisabled={!pizzaToDelete || isPending}
       />
 
       <PizzaForm

@@ -34,7 +34,7 @@ const defaultValues: PizzaFormValues = {
   category: "classic",
   name: "",
   description: "",
-  status: "active",
+  status: "available",
 };
 
 function PizzaForm({
@@ -81,7 +81,7 @@ function PizzaForm({
       category: pizza.category ?? "classic",
       name: pizza.name ?? "",
       description: pizza.description ?? "",
-      status: pizza.status ?? "active",
+      status: pizza.status ?? "available",
     });
   }, [open, pizza, reset]);
 
@@ -242,9 +242,8 @@ function PizzaForm({
                 aria-invalid={Boolean(errors.status)}
                 {...register("status")}
               >
-                <option value="active">Active</option>
-                <option value="draft">Draft</option>
-                <option value="archived">Archived</option>
+                <option value="available">Available</option>
+                <option value="unavailable">Unavailable</option>
               </Select>
               {errors.status ? (
                 <p className="text-sm text-destructive">{errors.status.message}</p>
@@ -272,23 +271,40 @@ function PizzaForm({
             </div>
 
             <div className="space-y-2 col-span-3">
+              <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-primary" htmlFor="pizza-image">
-                    Pizza Image
-                  </label>
-                  <Input
-                    id="pizza-image"
-                    type="file"
-                    accept="image/*"
-                    className="h-11"
-                    aria-invalid={Boolean(imageError)}
-                    onChange={(event) => {
-                      const file = event.target.files?.[0] ?? null;
-                      setSelectedFile(file);
-                      setImageError("");
-                    }}
-                  />
-                  {previewUrl || existingImageUrl ? (
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold text-primary" htmlFor="pizza-image">
+                          Pizza Image
+                        </label>
+                        <Input
+                          id="pizza-image"
+                          type="file"
+                          accept="image/*"
+                          className="h-11"
+                          aria-invalid={Boolean(imageError)}
+                          onChange={(event) => {
+                            const file = event.target.files?.[0] ?? null;
+                            setSelectedFile(file);
+                            setImageError("");
+                          }}
+                        />
+                      </div>
+                      {isEditMode && pizza ? (
+                        <div className="grid gap-2 rounded-xl border border-border bg-muted/40 p-4 text-sm sm:content-start">
+                          <p>
+                            <span className="font-semibold text-primary">ID:</span>{" "}
+                            {pizza.id}
+                          </p>
+                          <p>
+                            <span className="font-semibold text-primary">Created:</span>{" "}
+                            {new Date(pizza.created_at).toLocaleString()}
+                          </p>
+                        </div>
+                      ) : null}
+                </div>
+                
+                 {previewUrl || existingImageUrl ? (
                     <div className="relative my-3 overflow-hidden rounded-2xl border border-border bg-muted/30 max-w-50 mx-auto">
                       <div className="relative aspect-video w-full">
                         <Image
@@ -319,20 +335,12 @@ function PizzaForm({
                   {imageError ? (
                     <p className="text-sm text-destructive">{imageError}</p>
                   ) : null}
-                </div>
 
-                {isEditMode && pizza ? (
-                  <div className="grid gap-2 rounded-xl border border-border bg-muted/40 p-4 text-sm sm:content-start">
-                    <p>
-                      <span className="font-semibold text-primary">ID:</span>{" "}
-                      {pizza.id}
-                    </p>
-                    <p>
-                      <span className="font-semibold text-primary">Created:</span>{" "}
-                      {new Date(pizza.created_at).toLocaleString()}
-                    </p>
-                  </div>
-                ) : null}
+               
+              </div>
+              
+
+               
             </div>
           </DialogBody>
 
