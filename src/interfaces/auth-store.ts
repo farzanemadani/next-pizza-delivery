@@ -5,5 +5,5 @@ export interface AuthState {
   loading: boolean;
   error: string;
   fetchUser: () => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }

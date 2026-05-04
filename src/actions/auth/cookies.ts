@@ -21,3 +21,10 @@ export const setAuthCookies = async (token: string, role: string) => {
     maxAge: 60 * 60 * 24 * 7,
   });
 };
+
+export const clearAuthCookies = async () => {
+  const cookieStore = await cookies();
+
+  cookieStore.delete("token");
+  cookieStore.delete("role");
+};

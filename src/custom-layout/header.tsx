@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu } from "lucide-react";
+import HeaderMenuSheet from "@/custom-layout/header-menu/header-menu-sheet";
 import { useAuthStore } from "@/stores/auth-store";
 
 function Header() {
@@ -29,7 +29,7 @@ function Header() {
     <div className="px-10 py-6 bg-primary flex justify-between">
       <h1 className="text-xl font-bold text-white">Pizza Pro</h1>
 
-      <div className="flex justify-between gap-5">
+      <div className="flex justify-between items-center gap-5">
         {displayName ? (
           <h1 className="text-white">{displayName}</h1>
         ) : (
@@ -38,7 +38,7 @@ function Header() {
             className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"
           />
         )}
-        <Menu className="text-white" />
+        <HeaderMenuSheet displayName={displayName} role={user?.role} />
       </div>
     </div>
   );
