@@ -1,18 +1,19 @@
 "use server";
 
 import bcrypt from "bcrypt";
-import { createClient } from "@supabase/supabase-js";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/env";
 import type { IUser } from "@/interfaces";
 import type { RegisterUserResult } from "@/types";
+import { createClient } from "@/utils/supabase/client";
 
 export const registerUser = async (
   payload: Partial<IUser>,
 ): Promise<RegisterUserResult> => {
-  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  const { client: supabase, error } = createClient();
+
+  if (!supabase) {
     return {
       success: false,
-      message: "Supabase environment variables are missing.",
+      message: error,
     };
   }
 
@@ -26,8 +27,6 @@ export const registerUser = async (
       message: "Name, email, and password are required.",
     };
   }
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   const { data: existingUser, error: findUserError } = await supabase
     .from("user_profiles")

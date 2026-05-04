@@ -1,12 +1,12 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET, SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/env";
+import { JWT_SECRET } from "@/lib/env";
 import type { ApiResponse } from "@/types";
 import type { UserPublic } from "@/types";
 import type { TokenPayload } from "@/types";
+import { createClient } from "@/utils/supabase/client";
 
 export const validateJwtTokenAndGetUser = async (): Promise<ApiResponse<UserPublic>> => {
   try {
@@ -21,7 +21,9 @@ export const validateJwtTokenAndGetUser = async (): Promise<ApiResponse<UserPubl
       return { success: false, message: "Missing JWT secret." };
     }
 
-    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+    const { client: supabase, error: clientError } = createClient();
+
+    if (!supabase) {
       return { success: false, message: "Supabase environment variables are missing." };
     }
 
@@ -30,8 +32,6 @@ export const validateJwtTokenAndGetUser = async (): Promise<ApiResponse<UserPubl
     if (!decoded.userID) {
       return { success: false, message: "Invalid token payload" };
     }
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     const { data: user, error } = await supabase
       .from("user_profiles")

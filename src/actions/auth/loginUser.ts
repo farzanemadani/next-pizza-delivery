@@ -1,19 +1,20 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/env";
 import type { IUser } from "@/interfaces";
 import type { LoginUserResult } from "@/types";
 import bcrypt from "bcrypt";
+import { createClient } from "@/utils/supabase/client";
 import { createJwt } from "./createJwt";
 
 export const loginUser = async (
   payload: Pick<IUser, "email" | "password" | "role">,
 ): Promise<LoginUserResult> => {
-  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  const { client: supabase, error } = createClient();
+
+  if (!supabase) {
     return {
       success: false,
-      message: "Supabase environment variables are missing.",
+      message: error,
     };
   }
 
@@ -27,8 +28,6 @@ export const loginUser = async (
       message: "Email, password, and role are required.",
     };
   }
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   const { data: user, error: findUserError } = await supabase
     .from("user_profiles")
