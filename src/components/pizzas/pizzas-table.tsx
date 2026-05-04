@@ -3,6 +3,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PizzasTableProps } from "@/components/pizzas/types";
+import { useRouter } from "next/navigation";
 
 function PizzasTable({
   pizzas,
@@ -11,6 +12,7 @@ function PizzasTable({
   onEdit,
   onDelete,
 }: PizzasTableProps) {
+  const router = useRouter();
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
       <div className="overflow-x-auto">
@@ -86,6 +88,16 @@ function PizzasTable({
                         {isDeleting && deletingPizzaId === pizza.id
                           ? "Deleting..."
                           : "Delete"}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          router.push(`/admin/pizzas/variants/${pizza.id}`)
+                        }
+                      >
+                        Variants
                       </Button>
                     </div>
                   </td>
