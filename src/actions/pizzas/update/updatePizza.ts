@@ -5,7 +5,7 @@ import type { ApiResponse } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
 type UpdatePizzaInput = Partial<
-  Pick<IPizza, "name" | "description" | "image" | "status">
+  Pick<IPizza, "category" | "name" | "description" | "image" | "status">
 >;
 
 export const updatePizza = async (

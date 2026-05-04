@@ -4,7 +4,10 @@ import type { IPizza } from "@/interfaces";
 import type { ApiResponse } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
-type CreatePizzaInput = Pick<IPizza, "name" | "description" | "image" | "status">;
+type CreatePizzaInput = Pick<
+  IPizza,
+  "category" | "name" | "description" | "image" | "status"
+>;
 
 export const createPizza = async (
   payload: CreatePizzaInput,
