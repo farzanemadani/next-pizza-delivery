@@ -9,15 +9,9 @@ import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/ui/dialog/confirm-dialog";
 import VariantsTable from "@/components/pizzas/variants-table";
 import VariantForm from "@/components/ui/form/variant-form";
-import PageTitle from "@/components/ui/pageTitle";
-import { PizzaVariantsPageContentProps } from "./types";
+import type { VariantsListProps } from "./types";
 
-
-
-function PizzaVariantsPageContent({
-  pizza,
-  initialVariants,
-}: PizzaVariantsPageContentProps) {
+function VariantsList({ pizza, initialVariants }: VariantsListProps) {
   const [variants, setVariants] = useState<IVariant[]>(initialVariants);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<IVariant | null>(null);
@@ -103,7 +97,10 @@ function PizzaVariantsPageContent({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <PageTitle title={`Variants for ${pizza.name}`} />
+        <h1 className="text-3xl font-bold">
+          <span className="text-muted-foreground">Variants for</span>{" "}
+          <span className="text-primary">{pizza.name}</span>
+        </h1>
         <Button className="h-11 px-5" onClick={openCreateDialog}>
           <Plus className="size-4" />
           Add Variant
@@ -146,4 +143,4 @@ function PizzaVariantsPageContent({
   );
 }
 
-export default PizzaVariantsPageContent;
+export default VariantsList;

@@ -1,16 +1,8 @@
 "use client";
 
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { IVariant } from "@/interfaces";
-
-export interface VariantsTableProps {
-  variants: IVariant[];
-  deletingVariantId: number | null;
-  isDeleting: boolean;
-  onEdit: (variant: IVariant) => void;
-  onDelete: (variant: IVariant) => void;
-}
+import type { VariantsTableProps } from "./types";
 
 function VariantsTable({
   variants,
@@ -53,19 +45,26 @@ function VariantsTable({
                         onClick={() => onEdit(variant)}
                       >
                         <Pencil className="size-4" />
-                        Edit
                       </Button>
                       <Button
                         type="button"
                         variant="destructive"
                         size="sm"
                         onClick={() => onDelete(variant)}
-                        disabled={isDeleting && deletingVariantId === variant.id}
+                        disabled={
+                          isDeleting && deletingVariantId === variant.id
+                        }
                       >
-                        <Trash2 className="size-4" />
-                        {isDeleting && deletingVariantId === variant.id
-                          ? "Deleting..."
-                          : "Delete"}
+                        {isDeleting && deletingVariantId === variant.id ? (
+                          <>
+                            <LoaderCircle className="size-4 animate-spin" />
+                            Deleting...
+                          </>
+                        ) : (
+                          <>
+                            <Trash2 className="size-4" />
+                          </>
+                        )}
                       </Button>
                     </div>
                   </td>
@@ -77,7 +76,8 @@ function VariantsTable({
                   colSpan={4}
                   className="px-5 py-16 text-center text-muted-foreground"
                 >
-                  No variants added yet. Create your first variant to get started.
+                  No variants added yet. Create your first variant to get
+                  started.
                 </td>
               </tr>
             )}

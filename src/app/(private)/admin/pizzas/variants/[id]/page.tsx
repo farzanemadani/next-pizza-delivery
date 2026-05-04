@@ -1,7 +1,7 @@
 
 import { PizzaVariantsPageProps } from "./types";
 import { readPizzaById } from "@/actions/pizzas";
-import PageContent from "./content";
+import VariantsList from "./variants-list";
 import { readVariantsByPizzaId } from "@/actions/variants";
 
 async function PizzaVariantsPage({ params }: PizzaVariantsPageProps) {
@@ -24,7 +24,7 @@ async function PizzaVariantsPage({ params }: PizzaVariantsPageProps) {
   }
 
   return (
-    <PageContent
+    <VariantsList
       pizza={pizzaResponse.data}
       initialVariants={variantsResponse.data}
     />
