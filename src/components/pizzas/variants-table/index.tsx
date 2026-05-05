@@ -42,6 +42,7 @@ function VariantsTable({
                         type="button"
                         variant="outline"
                         size="sm"
+                        className="cursor-pointer"
                         onClick={() => onEdit(variant)}
                       >
                         <Pencil className="size-4" />
@@ -50,6 +51,7 @@ function VariantsTable({
                         type="button"
                         variant="destructive"
                         size="sm"
+                        className="cursor-pointer"
                         onClick={() => onDelete(variant)}
                         disabled={
                           isDeleting && deletingVariantId === variant.id

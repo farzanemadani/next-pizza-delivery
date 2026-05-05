@@ -16,11 +16,3 @@ export interface PizzaFormProps {
 export interface AdminPizzasManagerProps {
   initialPizzas: IPizza[];
 }
-
-export interface PizzasTableProps {
-  pizzas: IPizza[];
-  deletingPizzaId: number | null;
-  isDeleting: boolean;
-  onEdit: (pizza: IPizza) => void;
-  onDelete: (pizza: IPizza) => void;
-}

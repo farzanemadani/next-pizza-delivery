@@ -2,7 +2,7 @@
 
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { PizzasTableProps } from "@/components/pizzas/types";
+import type { PizzasTableProps } from "./types";
 import { useRouter } from "next/navigation";
 
 function PizzasTable({
@@ -71,6 +71,7 @@ function PizzasTable({
                       <Button
                         type="button"
                         variant="outline"
+                        className="cursor-pointer"
                         size="sm"
                         onClick={() => onEdit(pizza)}
                       >
@@ -80,6 +81,7 @@ function PizzasTable({
                       <Button
                         type="button"
                         variant="destructive"
+                        className="cursor-pointer"
                         size="sm"
                         onClick={() => onDelete(pizza)}
                         disabled={isDeleting && deletingPizzaId === pizza.id}
@@ -93,6 +95,7 @@ function PizzasTable({
                         type="button"
                         variant="outline"
                         size="sm"
+                        className="cursor-pointer"
                         onClick={() =>
                           router.push(`/admin/pizzas/variants/${pizza.id}`)
                         }
