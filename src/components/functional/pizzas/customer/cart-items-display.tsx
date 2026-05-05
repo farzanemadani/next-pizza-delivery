@@ -4,7 +4,6 @@ import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useCartStore } from "@/stores/cart-store";
 import { Button } from "@/components/ui/button";
-import PageTitle from "@/components/ui/pageTitle";
 
 export function CartItemsDisplay() {
   const { items, removeFromCart, updateQuantity, getTotalPrice } =
