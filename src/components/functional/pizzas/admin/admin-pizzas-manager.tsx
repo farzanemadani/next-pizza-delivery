@@ -7,11 +7,10 @@ import { deletePizza } from "@/actions/pizzas";
 import type { IPizza } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/ui/dialog/confirm-dialog";
-import PizzasTable from "@/components/pizzas/pizzas-table";
+import PizzasTable from "./pizzas-table";
 import PizzaForm from "@/components/ui/form/pizza-form";
 import PageTitle from "@/components/ui/pageTitle";
 import { AdminPizzasManagerProps } from "./types";
-
 
 function AdminPizzasManager({ initialPizzas }: AdminPizzasManagerProps) {
   const [pizzas, setPizzas] = useState<IPizza[]>(initialPizzas);
@@ -64,7 +63,9 @@ function AdminPizzasManager({ initialPizzas }: AdminPizzasManagerProps) {
         }
 
         setPizzas((current) =>
-          current.filter((currentPizza) => currentPizza.id !== pizzaToDelete.id),
+          current.filter(
+            (currentPizza) => currentPizza.id !== pizzaToDelete.id,
+          ),
         );
         toast.success("Pizza deleted.");
         setConfirmDeleteOpen(false);
@@ -91,7 +92,6 @@ function AdminPizzasManager({ initialPizzas }: AdminPizzasManagerProps) {
       );
     });
   };
-
 
   return (
     <div className="flex flex-col gap-5">

@@ -1,10 +1,4 @@
 import type { IPizza } from "@/interfaces";
-export interface PizzaFormValues {
-  category: string;
-  name: string;
-  description: string;
-  status: string;
-}
 
 export interface PizzaFormProps {
   open: boolean;

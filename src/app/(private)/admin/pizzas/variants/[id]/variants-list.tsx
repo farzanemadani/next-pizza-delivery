@@ -7,7 +7,7 @@ import { deleteVariant } from "@/actions/variants";
 import type { IVariant } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/ui/dialog/confirm-dialog";
-import VariantsTable from "@/components/pizzas/variants-table";
+import { VariantsTable } from "@/components/functional/pizzas/admin/variants-table";
 import VariantForm from "@/components/ui/form/variant-form";
 import type { VariantsListProps } from "./types";
 

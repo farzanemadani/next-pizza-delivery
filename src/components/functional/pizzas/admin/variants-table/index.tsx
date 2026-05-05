@@ -1,10 +1,10 @@
 "use client";
 
-import { Pencil, Trash2, LoaderCircle } from "lucide-react";
+import type { IVariant } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import type { VariantsTableProps } from "./types";
 
-function VariantsTable({
+export function VariantsTable({
   variants,
   deletingVariantId,
   isDeleting,
@@ -27,11 +27,15 @@ function VariantsTable({
             {variants.length ? (
               variants.map((variant) => (
                 <tr key={variant.id} className="border-t border-border">
-                  <td className="px-5 py-4 align-top font-semibold text-primary">
-                    {variant.type ?? "Untitled"}
+                  <td className="px-5 py-4 align-top">
+                    <p className="font-semibold text-primary">
+                      {variant.type ?? "Untitled"}
+                    </p>
                   </td>
-                  <td className="px-5 py-4 align-top font-semibold text-primary">
-                    ${variant.price?.toFixed(2) ?? "0.00"}
+                  <td className="px-5 py-4 align-top">
+                    <p className="font-semibold">
+                      ${variant.price?.toFixed(2) ?? "0.00"}
+                    </p>
                   </td>
                   <td className="px-5 py-4 align-top text-muted-foreground">
                     {new Date(variant.created_at).toLocaleDateString()}
@@ -41,32 +45,25 @@ function VariantsTable({
                       <Button
                         type="button"
                         variant="outline"
-                        size="sm"
                         className="cursor-pointer"
+                        size="sm"
                         onClick={() => onEdit(variant)}
                       >
-                        <Pencil className="size-4" />
+                        Edit
                       </Button>
                       <Button
                         type="button"
                         variant="destructive"
-                        size="sm"
                         className="cursor-pointer"
+                        size="sm"
                         onClick={() => onDelete(variant)}
                         disabled={
                           isDeleting && deletingVariantId === variant.id
                         }
                       >
-                        {isDeleting && deletingVariantId === variant.id ? (
-                          <>
-                            <LoaderCircle className="size-4 animate-spin" />
-                            Deleting...
-                          </>
-                        ) : (
-                          <>
-                            <Trash2 className="size-4" />
-                          </>
-                        )}
+                        {isDeleting && deletingVariantId === variant.id
+                          ? "Deleting..."
+                          : "Delete"}
                       </Button>
                     </div>
                   </td>
@@ -89,5 +86,3 @@ function VariantsTable({
     </div>
   );
 }
-
-export default VariantsTable;

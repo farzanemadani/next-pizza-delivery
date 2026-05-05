@@ -13,7 +13,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="flex flex-col gap-5">
       <h1 className="text-3xl font-semibold">Admin Dashboard</h1>
-      <ProfileCard user={user} />
+      {/* <ProfileCard user={user} /> */}
     </div>
   );
 }

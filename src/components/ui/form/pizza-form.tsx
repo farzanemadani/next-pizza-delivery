@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { uploadImage } from "@/actions/images";
 import { createPizza, updatePizza } from "@/actions/pizzas";
 import { pizzaCategories } from "@/constants/categories";
-import type { PizzaFormProps } from "@/components/pizzas/types";
+import type { PizzaFormProps } from "@/components/functional/pizzas/admin/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,10 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { SUPABASE_STORAGE_BUCKET } from "@/lib/env";
-import {
-  pizzaSchema,
-  type PizzaFormValues,
-} from "@/validation/pizza";
+import { pizzaSchema, type PizzaFormValues } from "@/validation/pizza";
 
 const defaultValues: PizzaFormValues = {
   category: "classic",
@@ -37,12 +34,7 @@ const defaultValues: PizzaFormValues = {
   status: "available",
 };
 
-function PizzaForm({
-  open,
-  onOpenChange,
-  pizza,
-  onSuccess,
-}: PizzaFormProps) {
+function PizzaForm({ open, onOpenChange, pizza, onSuccess }: PizzaFormProps) {
   const isEditMode = Boolean(pizza);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string>("");
@@ -190,7 +182,10 @@ function PizzaForm({
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <DialogBody className="grid gap-5 sm:grid-cols-3">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-primary" htmlFor="pizza-name">
+              <label
+                className="text-sm font-semibold text-primary"
+                htmlFor="pizza-name"
+              >
                 Name
               </label>
               <Input
@@ -201,7 +196,9 @@ function PizzaForm({
                 {...register("name")}
               />
               {errors.name ? (
-                <p className="text-sm text-destructive">{errors.name.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.name.message}
+                </p>
               ) : null}
             </div>
 
@@ -231,9 +228,11 @@ function PizzaForm({
               ) : null}
             </div>
 
-
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-primary" htmlFor="pizza-status">
+              <label
+                className="text-sm font-semibold text-primary"
+                htmlFor="pizza-status"
+              >
                 Status
               </label>
               <Select
@@ -246,7 +245,9 @@ function PizzaForm({
                 <option value="unavailable">Unavailable</option>
               </Select>
               {errors.status ? (
-                <p className="text-sm text-destructive">{errors.status.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.status.message}
+                </p>
               ) : null}
             </div>
 
@@ -273,74 +274,76 @@ function PizzaForm({
             <div className="space-y-2 col-span-3">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-primary" htmlFor="pizza-image">
-                          Pizza Image
-                        </label>
-                        <Input
-                          id="pizza-image"
-                          type="file"
-                          accept="image/*"
-                          className="h-11"
-                          aria-invalid={Boolean(imageError)}
-                          onChange={(event) => {
-                            const file = event.target.files?.[0] ?? null;
-                            setSelectedFile(file);
-                            setImageError("");
-                          }}
-                        />
-                      </div>
-                      {isEditMode && pizza ? (
-                        <div className="grid gap-2 rounded-xl border border-border bg-muted/40 p-4 text-sm sm:content-start">
-                          <p>
-                            <span className="font-semibold text-primary">ID:</span>{" "}
-                            {pizza.id}
-                          </p>
-                          <p>
-                            <span className="font-semibold text-primary">Created:</span>{" "}
-                            {new Date(pizza.created_at).toLocaleString()}
-                          </p>
-                        </div>
-                      ) : null}
-                </div>
-                
-                 {previewUrl || existingImageUrl ? (
-                    <div className="relative my-3 overflow-hidden rounded-2xl border border-border bg-muted/30 max-w-50 mx-auto">
-                      <div className="relative aspect-video w-full">
-                        <Image
-                          src={previewUrl || existingImageUrl || ""}
-                          alt="Pizza preview"
-                          fill
-                          className="object-cover"
-                          unoptimized={Boolean(previewUrl)}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between gap-3 border-t border-border px-4 py-3">
-                        <p className="truncate text-sm text-muted-foreground">
-                          {selectedFile ? selectedFile.name : "Current uploaded image"}
-                        </p>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={handleRemoveImage}
-                          className="shrink-0"
-                        >
-                          <X className="size-4" />
-                          Remove
-                        </Button>
-                      </div>
+                  <div className="space-y-2">
+                    <label
+                      className="text-sm font-semibold text-primary"
+                      htmlFor="pizza-image"
+                    >
+                      Pizza Image
+                    </label>
+                    <Input
+                      id="pizza-image"
+                      type="file"
+                      accept="image/*"
+                      className="h-11"
+                      aria-invalid={Boolean(imageError)}
+                      onChange={(event) => {
+                        const file = event.target.files?.[0] ?? null;
+                        setSelectedFile(file);
+                        setImageError("");
+                      }}
+                    />
+                  </div>
+                  {isEditMode && pizza ? (
+                    <div className="grid gap-2 rounded-xl border border-border bg-muted/40 p-4 text-sm sm:content-start">
+                      <p>
+                        <span className="font-semibold text-primary">ID:</span>{" "}
+                        {pizza.id}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-primary">
+                          Created:
+                        </span>{" "}
+                        {new Date(pizza.created_at).toLocaleString()}
+                      </p>
                     </div>
                   ) : null}
-                  {imageError ? (
-                    <p className="text-sm text-destructive">{imageError}</p>
-                  ) : null}
+                </div>
 
-               
+                {previewUrl || existingImageUrl ? (
+                  <div className="relative my-3 overflow-hidden rounded-2xl border border-border bg-muted/30 max-w-50 mx-auto">
+                    <div className="relative aspect-video w-full">
+                      <Image
+                        src={previewUrl || existingImageUrl || ""}
+                        alt="Pizza preview"
+                        fill
+                        className="object-cover"
+                        unoptimized={Boolean(previewUrl)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between gap-3 border-t border-border px-4 py-3">
+                      <p className="truncate text-sm text-muted-foreground">
+                        {selectedFile
+                          ? selectedFile.name
+                          : "Current uploaded image"}
+                      </p>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleRemoveImage}
+                        className="shrink-0"
+                      >
+                        <X className="size-4" />
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
+                {imageError ? (
+                  <p className="text-sm text-destructive">{imageError}</p>
+                ) : null}
               </div>
-              
-
-               
             </div>
           </DialogBody>
 
