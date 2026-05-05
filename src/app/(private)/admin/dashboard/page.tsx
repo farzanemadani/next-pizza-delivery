@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuthStore } from '@/stores/auth-store'
-import ProfileCard from "@/components/functional/profile-card";
 
 export default function AdminDashboardPage() {
   const { user, loading, error } = useAuthStore();

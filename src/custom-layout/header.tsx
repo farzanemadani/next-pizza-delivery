@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import HeaderMenuSheet from "@/custom-layout/header-menu/header-menu-sheet";
+import { CartIcon } from "@/components/functional/cart-icon";
 import { useAuthStore } from "@/stores/auth-store";
 
 function Header() {
@@ -38,6 +39,7 @@ function Header() {
             className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"
           />
         )}
+        {user?.role === "customer" && <CartIcon />}
         <HeaderMenuSheet displayName={displayName} role={user?.role} />
       </div>
     </div>

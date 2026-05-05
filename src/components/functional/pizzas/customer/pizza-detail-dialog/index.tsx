@@ -5,6 +5,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { readVariantsByPizzaId } from "@/actions/variants/read/readVariantsByPizzaId";
 import { IVariant } from "@/interfaces";
+import { useCartStore } from "@/stores/cart-store";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,6 +27,7 @@ export function PizzaDetailDialog({
   const [selectedVariant, setSelectedVariant] = useState<IVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const addToCart = useCartStore((state) => state.addToCart);
 
   useEffect(() => {
     if (open && pizza) {
@@ -55,12 +57,13 @@ export function PizzaDetailDialog({
   };
 
   const handleAddToCart = () => {
-    if (!selectedVariant) {
+    if (!pizza || !selectedVariant) {
       toast.error("Please select a variant");
       return;
     }
-    // TODO: Implement add to cart functionality
-    toast.success(`Added ${quantity}x ${pizza?.name} to cart`);
+
+    addToCart(pizza, selectedVariant, quantity);
+    toast.success(`Added ${quantity}x ${pizza.name} to cart`);
     onOpenChange(false);
     setQuantity(1);
   };
